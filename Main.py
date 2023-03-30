@@ -21,7 +21,7 @@ def init_logging():
     init_filepath()
 
     # creates log file in the format '<username> @ <datetime>.log
-    filename = os.getlogin() + ' @ ' + str(datetime.now().replace(microsecond=0)).replace(':', '_') + ".log"
+    filename = os.getlogin() + ' @ ' + str(datetime.datetime.now().replace(microsecond=0)).replace(':', '_') + ".log"
 
     # setup log config
     log.basicConfig(encoding='utf-8',
@@ -40,6 +40,7 @@ def get_textbox_contents():
 
 
 def import_file(path_to_file: str, logger):
+    # TODO make sure this can open file selector
     if not os.path.exists(path_to_file):
         logger.warning("Unable to find file: " + path_to_file + " Please verify the path is correct! ")
         return None
@@ -65,11 +66,61 @@ def get_properties_from_ad():
                              "(get-aduser * -properties *).propertynames"],
                             stdout=sys.stdout)
     p.communicate()
+    property_list = ['']
+    return property_list
+
+
+def add_additional_field(root, row, column):
+    # TODO finish this function
+    e = tk.Entry(root)
+    e.grid(row=row, column=column)
+
+
+def get_entry_values(entry):
+    # TODO finish this function
+    return entry.get()
 
 
 def main():
     logger = init_logging()
+
+    logical_operator_list = ['>', '>=', '<', '<=', '==', '!=', 'and', 'or', 'not', 'xor']
+
+    # GUI initialize
     root = tk.Tk()
-    tk.Label(root, text="Assisted Directory").grid(row=0, column=5)
-    tk.Button(root, text="Import List (.xlsx, .csv, .txt").grid(row=20, column=0)
+
+    # Title
+    label_title = tk.Label(root, text="Assisted Directory")
+    label_title.grid(row=0, column=0)
+
+    # Entry Value fields
+    entry1 = tk.Entry(root)
+    entry1.grid(row=2, column=0)
+    e1val = entry1.get()
+
+    # Property dropdown
+    returned_values = get_properties_from_ad
+    prop_drop1 = tk.Spinbox(root, values=returned_values)
+    prop_drop1.grid(row=2, column=1)
+    p1val = prop_drop1.get()
+
+    # Logical operators
+    op_drop1 = tk.Spinbox(root, values=logical_operator_list)
+    op_drop1.grid(row=2, column=2)
+    o1val = op_drop1.get()
+
+    # Buttons
+    button_additional = tk.Button(root, text="Add additional field", command=add_additional_field(root, 3, 0))
+    button_additional.grid(row=15, column=0)
+
+    button_search = tk.Button(root, text="Search", command=get_entry_values(entry1))
+    button_search.grid(row=16, column=0)
+
+    # Import Buttons
+    tk.Button(root, text="Import List (.xlsx, .csv, .txt)",
+              command=import_file(path_to_file="test", logger=logger)).grid(row=20, column=0)
+
     root.mainloop()
+
+
+main()
