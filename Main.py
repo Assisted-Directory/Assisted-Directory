@@ -110,15 +110,15 @@ def main():
     o1val = op_drop1.get()
 
     # Buttons
-    button_additional = tk.Button(root, text="Add additional field", command=add_additional_field(root, 3, 0))
+    button_additional = tk.Button(root, text="Add additional field", command=lambda: add_additional_field(root, 3, 0))
     button_additional.grid(row=15, column=0)
 
-    button_search = tk.Button(root, text="Search", command=get_entry_values(entry1))
+    button_search = tk.Button(root, text="Search", command=lambda: get_entry_values(entry1))
     button_search.grid(row=16, column=0)
 
     # Import Buttons
     tk.Button(root, text="Import List (.xlsx, .csv, .txt)",
-              command=import_file(path_to_file="test", logger=logger)).grid(row=20, column=0)
+              command=lambda: import_file(path_to_file="test", logger=logger)).grid(row=20, column=0)
 
     root.mainloop()
 
